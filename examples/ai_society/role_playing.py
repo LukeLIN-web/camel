@@ -15,9 +15,12 @@ from colorama import Fore
 
 from camel.societies import RolePlaying
 from camel.utils import print_text_animated
+from camel.agents import ChatAgent
+from camel.messages import BaseMessage
+from camel.models import ModelFactory
+from camel.types import ModelPlatformType
 
-
-def main(model=None, chat_turn_limit=50) -> None:
+def main(model, chat_turn_limit=50) -> None:
     task_prompt = "Develop a trading bot for the stock market"
     role_play_session = RolePlaying(
         assistant_role_name="Python Programmer",
@@ -85,4 +88,10 @@ def main(model=None, chat_turn_limit=50) -> None:
 
 
 if __name__ == "__main__":
-    main()
+    ollama_model = ModelFactory.create(
+        model_platform=ModelPlatformType.OLLAMA,
+        model_type="llama3",
+        url="http://localhost:11434/v1",
+        model_config_dict={"temperature": 0.4},
+    )
+    main(model=ollama_model)
